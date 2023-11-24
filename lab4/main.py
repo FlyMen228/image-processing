@@ -24,9 +24,11 @@ def normalize_image(image: Image) -> list:
 def operator_sobel(image_array: list) -> Image:
     
     gradient_x = convolve2d(image_array, sobel_x, mode='same', boundary='symm', fillvalue=0)
-    gradient_y = convolve2d(image_array, sobel_y, mode='same', boundary='symm', fillvalue=0)
     
-    return Image.fromarray((np.sqrt(gradient_x**2 + gradient_y**2) * 255).astype(np.uint8))
+    gradient_x[gradient_x<0] = 0
+    gradient_x[gradient_x>1] = 1
+    
+    return Image.fromarray((gradient_x*np.sqrt(2) * 255).astype(np.uint8))
 
 def L2_gradient(image_arr: list) -> Image:
     
